@@ -231,7 +231,9 @@ WikiParser.prototype.parseBlock = function(terminatorRegExpString) {
 		return nextMatch.rule.parse();
 	}
 	// Treat it as a paragraph if we didn't find a block rule
-	return [{type: "element", tag: "p", children: this.parseInlineRun(terminatorRegExp)}];
+  var startPos = this.pos;
+  var children = this.parseInlineRun(terminatorRegExp);
+	return [{type: "element", tag: "p", children: children, start: startPos, end: this.pos}];
 };
 
 /*
@@ -378,7 +380,7 @@ WikiParser.prototype.pushTextWidget = function(array,text) {
 		text = $tw.utils.trim(text);
 	}
 	if(text) {
-		array.push({type: "text", text: text});
+		array.push({type: "text", text: text, start: this.pos, end: this.pos + text.length});
 	}
 };
 
@@ -431,4 +433,3 @@ WikiParser.prototype.amendRules = function(type,names) {
 exports["text/vnd.tiddlywiki"] = WikiParser;
 
 })();
-
