@@ -12,8 +12,8 @@ Wiki text inline rule for emphasis - superscript. For example:
 This wikiparser can be modified using the rules eg:
 
 ```
-\rules except superscript 
-\rules only superscript 
+\rules except superscript
+\rules only superscript
 ```
 
 \*/
@@ -37,13 +37,16 @@ exports.parse = function() {
 	this.parser.pos = this.matchRegExp.lastIndex;
 
 	// Parse the run including the terminator
-	var tree = this.parser.parseInlineRun(/\^\^/mg,{eatTerminator: true});
+  var startPos = this.parser.pos;
+  var tree = this.parser.parseInlineRun(/\^\^/mg, { eatTerminator: true });
 
 	// Return the classed span
 	return [{
 		type: "element",
 		tag: "sup",
-		children: tree
+    children: tree,
+    start: startPos,
+    end: this.parser.pos
 	}];
 };
 

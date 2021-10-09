@@ -37,13 +37,16 @@ exports.parse = function() {
 	this.parser.pos = this.matchRegExp.lastIndex;
 
 	// Parse the run including the terminator
-	var tree = this.parser.parseInlineRun(/\/\//mg,{eatTerminator: true});
+  var startPos = this.parser.pos;
+  var tree = this.parser.parseInlineRun(/\/\//mg, { eatTerminator: true });
 
 	// Return the classed span
 	return [{
 		type: "element",
 		tag: "em",
-		children: tree
+    children: tree,
+    start: startPos,
+    end: this.parser.pos
 	}];
 };
 

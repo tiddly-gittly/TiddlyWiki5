@@ -12,7 +12,7 @@ Wiki text inline rule for emphasis - underscore. For example:
 This wikiparser can be modified using the rules eg:
 
 ```
-\rules except underscore 
+\rules except underscore
 \rules only underscore
 ```
 
@@ -37,13 +37,16 @@ exports.parse = function() {
 	this.parser.pos = this.matchRegExp.lastIndex;
 
 	// Parse the run including the terminator
-	var tree = this.parser.parseInlineRun(/__/mg,{eatTerminator: true});
+  var startPos = this.parser.pos;
+  var tree = this.parser.parseInlineRun(/__/mg, { eatTerminator: true });
 
 	// Return the classed span
 	return [{
 		type: "element",
 		tag: "u",
-		children: tree
+    children: tree,
+    start: startPos,
+    end: this.parser.pos
 	}];
 };
 
