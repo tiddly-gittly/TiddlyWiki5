@@ -46,6 +46,7 @@ exports.parse = function() {
 		renderType = this.match[2];
 	// Move past the match
 	this.parser.pos = this.matchRegExp.lastIndex;
+	var startPos = this.parser.pos;
 	// Look for the end of the block
 	reEnd.lastIndex = this.parser.pos;
 	var match = reEnd.exec(this.parser.source),
@@ -69,12 +70,17 @@ exports.parse = function() {
 			container = $tw.fakeDocument.createElement("div");
 		widgetNode.render(container,null);
 		text = renderType === "text/html" ? container.innerHTML : container.textContent;
+		var endPos = this.parser.pos;
 		return [{
 			type: "element",
 			tag: "pre",
+			start: startPos,
+			end: endPos,
 			children: [{
 				type: "text",
-				text: text
+				text: text,
+				start: endPos - 3 - text.length,
+				end: endPos - 3,
 			}]
 		}];
 	}

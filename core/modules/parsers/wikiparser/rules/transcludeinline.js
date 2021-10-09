@@ -29,12 +29,15 @@ exports.init = function(parser) {
 exports.parse = function() {
 	// Move past the match
 	this.parser.pos = this.matchRegExp.lastIndex;
+	var startPos = this.parser.pos;
 	// Get the match details
 	var template = $tw.utils.trim(this.match[2]),
 		textRef = $tw.utils.trim(this.match[1]);
 	// Prepare the transclude widget
 	var transcludeNode = {
 			type: "transclude",
+			start: startPos + 2,
+			end: startPos + 2 + textRef.length + (template ? (2 + template.length) : 0),
 			attributes: {}
 		};
 	// Prepare the tiddler widget
@@ -46,6 +49,9 @@ exports.parse = function() {
 		targetIndex = tr.index;
 		tiddlerNode = {
 			type: "tiddler",
+			start: transcludeNode.start,
+			end: transcludeNode.end,
+			start: startPos,
 			attributes: {
 				tiddler: {type: "string", value: targetTitle}
 			},
